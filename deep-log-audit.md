@@ -203,6 +203,26 @@ The following is documentation for the project that produces these logs. Use it 
 {PROJECT_BRIEFING}
 --- PROJECT DOCS END ---
 
+== CROSS-CHUNK ROLE ==
+
+You are analyzing chunk {CHUNK_NUMBER} of {TOTAL_CHUNKS}.
+Chunk 1 = oldest time window. Chunk {TOTAL_CHUNKS} = newest (most recent) time window.
+
+Your results will be COMPARED with all other chunks to detect trends over time.
+The orchestrator will build a metric timeline across all chunks — so your job is not just to find problems,
+but to QUANTIFY them precisely so trends can be computed.
+
+For EVERY finding you report:
+- State exactly how many times it occurs in your chunk (count)
+- State the first and last occurrence timestamps
+- If it involves a numeric value (latency, duration, queue size), report the min/max/typical value
+
+This is what enables statements like:
+  "Error X: 3× in chunk 2, 8× in chunk 5, 21× in chunk 9 → worsening trend"
+  "Timeout Y: 12× in chunk 1, 5× in chunk 5, 1× in chunk 9 → improving trend"
+
+Without exact counts per chunk, cross-chunk trend detection is impossible.
+
 == ANALYSIS CHECKLIST ==
 
 Go through EVERY category below. For each, report what you find. If a category has zero findings, skip it entirely.
@@ -273,9 +293,19 @@ For each low finding:
 - Time span of chunk: [duration in minutes/hours]
 - Key components active: [list of modules/services seen in logs]
 
+### Cross-Chunk Signals
+<!-- Structured metrics for trend detection across chunks. Always include this section. -->
+- errors_total: [count of ERROR/CRITICAL lines]
+- warnings_total: [count of WARNING lines]
+- [error_pattern_name]: [count] occurrences (e.g. "ConnectionError: 14 occurrences")
+- [warning_pattern_name]: [count] occurrences (repeat for each distinct pattern found)
+- max_latency_ms: [highest latency value seen, or N/A]
+- gap_seconds_max: [longest gap between consecutive entries in seconds]
+- components_active: [comma-separated list of modules/services seen]
+
 If the chunk is completely healthy, write:
 "Chunk is healthy. No significant issues detected."
-Then provide statistics only.
+Then provide statistics and Cross-Chunk Signals only.
 ```
 
 **CRITICAL RULES FOR PHASE 3:**
@@ -301,7 +331,23 @@ Same root cause across multiple chunks = ONE entry in the report:
 - Note the chunk spread (how many chunks contain this issue)
 
 ### Step 3: Detect Trends
-For each deduplicated finding, compare its presence across chunks (chunk 1 = oldest, chunk N = newest):
+
+First, extract all `### Cross-Chunk Signals` sections from sub-agent responses and build a metric timeline table:
+
+| Metric | Chunk 1 | Chunk 2 | ... | Chunk N |
+|--------|---------|---------|-----|---------|
+| errors_total | N | N | ... | N |
+| warnings_total | N | N | ... | N |
+| [pattern_name] | N | N | ... | N |
+
+From this table, classify each metric's direction:
+- **↑ worsening** — values increase toward newer chunks
+- **↓ improving** — values decrease toward newer chunks
+- **→ stable** — values roughly consistent across chunks
+- **⚡ spike** — one chunk significantly higher than its neighbors
+- **isolated** — non-zero in only one chunk
+
+Then, for each deduplicated finding, compare its presence across chunks (chunk 1 = oldest, chunk N = newest):
 - **Worsening** — count or severity increases toward newer chunks
 - **Improving** — pattern fades toward newer chunks
 - **Stable** — consistent across chunks
@@ -333,6 +379,16 @@ Output the report below directly in chat. Replace all `{placeholders}` with actu
 | ... | ... | ... | ... | ... | ... |
 | {N}/{N} (newest) | {time_range} | {count} | {count} | {count} | {OK/WARN/CRIT} |
 | **Итого** | | **{sum}** | **{sum}** | **{sum}** | |
+
+## Тренды по метрикам
+
+| Метрика | Чанк 1 | Чанк 2 | ... | Чанк N | Тренд |
+|---------|--------|--------|-----|--------|-------|
+| errors_total | {N} | {N} | ... | {N} | {↑/↓/→/⚡} |
+| warnings_total | {N} | {N} | ... | {N} | {↑/↓/→/⚡} |
+| {pattern_name} | {N} | {N} | ... | {N} | {↑/↓/→/⚡} |
+
+_(строки с нулями во всех чанках — пропускать)_
 
 ## Критические проблемы
 
