@@ -4,6 +4,8 @@ Repository for iterative development of the `chunks-log-analyzer` skill — an o
 
 This repository contains the complete development lifecycle of the skill: from idea and prototype through iterative testing to a stable version. Each skill version is stored in a separate branch with full history of runs and discovered problems. This approach allows tracking the skill's evolution, understanding which changes led to improvements, and safely experimenting with new approaches.
 
+> The idea evolved from [llm-log-analyzer](https://github.com/dr11m/llm-log-analyzer) — a Python script that used LLM for log analysis. The skill brings this idea to Claude Code/Copilot, adding parallelization via sub-agents and cross-chunk trend analysis.
+
 ## What the skill does
 
 The skill analyzes log files of any size by splitting them into chunks and distributing the analysis across multiple parallel agents. Each agent audits its own chunk, then the orchestrator collects results, detects cross-chunk trends and anomalies, and generates a final report.
