@@ -35,6 +35,11 @@
 
 > Скил использует индуктивный подход. Сравнение с дедуктивным [log-validate](https://github.com/dr11m/log-validate-skill): log-insight читает лог целиком агентами, log-validate строит карту из кода и проверяет через grep.
 
+## Related Projects
+
+- [llm-log-analyzer](https://github.com/dr11m/llm-log-analyzer) — standalone Python module, original implementation
+- [log-validate](https://github.com/dr11m/log-validate-skill) — deductive approach, code-aware validation via grep
+
 ## Использование скила
 
 Вызовите скил через `/log-insight` с путём к лог-файлу:
