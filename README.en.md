@@ -1,6 +1,6 @@
-# chunks-log-analyzer-skill
+# log-insight
 
-Repository for iterative development of the `chunks-log-analyzer` skill — an orchestrator for parallel log file auditing using AI agents.
+Repository for iterative development of the `log-insight` skill — an orchestrator for parallel log file auditing using AI agents. Inductive approach: the model receives log text and draws conclusions based on project documentation.
 
 This repository contains the complete development lifecycle of the skill: from idea and prototype through iterative testing to a stable version. Each skill version is stored in a separate branch with full history of runs and discovered problems. This approach allows tracking the skill's evolution, understanding which changes led to improvements, and safely experimenting with new approaches.
 
@@ -29,11 +29,11 @@ When you run the skill on a large log file (gigabytes), a problem arises: the mo
 
 ## Skill Usage
 
-Invoke the skill via `/chunks-log-analyzer` with the path to a log file:
+Invoke the skill via `/log-insight` with the path to a log file:
 
 ```
-/chunks-log-analyzer /path/to/app.log
-/chunks-log-analyzer ./logs/production.log
+/log-insight /path/to/app.log
+/log-insight ./logs/production.log
 ```
 
 The skill automatically:
@@ -63,8 +63,10 @@ Both provide quality auditing. Claude Code is recommended for production tasks.
 ## Structure
 
 ```
-chunks-log-analyzer.md               # current skill (main = stable version)
+log-insight.md                  # current skill (main = stable version)
 CHANGELOG.md                    # version history: branch tree, runs, problems
+README.md                       # this file
+README.en.md                    # English version
 .claude/commands/
   update-skill-changelog.md     # command: audit and update CHANGELOG.md
   record-run.md                 # command: record run + problems
@@ -74,7 +76,7 @@ CHANGELOG.md                    # version history: branch tree, runs, problems
 
 1. `main` contains the latest stable version of the skill
 2. Each iteration — separate branch: `git checkout -b v2-feature-name`
-3. On the branch, edit `chunks-log-analyzer.md`, test, record in `CHANGELOG.md`
+3. On the branch, edit `log-insight.md`, test, record in `CHANGELOG.md`
 4. When stable — merge to `main`
 
 ### Commands

@@ -1,8 +1,8 @@
 ---
-description: Universal deep log audit — parallel sub-agents analyze log chunks, main agent only orchestrates
+description: Universal log insight — inductive analysis of log chunks with deep context awareness
 ---
 
-# Deep Log Audit
+# Log Insight
 
 You are a log audit ORCHESTRATOR. You coordinate sub-agents that analyze logs. You NEVER analyze logs yourself.
 
@@ -398,7 +398,7 @@ Then, for each deduplicated finding, compare its presence across chunks (chunk 1
 Output the report below directly in chat. Replace all `{placeholders}` with actual data.
 
 ```markdown
-# Deep Log Audit Report
+# Log Insight Report
 
 ## Параметры анализа
 - **Файл:** {path} ({human_readable_size}, {total_lines} строк)
@@ -462,7 +462,7 @@ _(строки с нулями во всех чанках — пропускат
 
 If ALL chunks report zero issues:
 ```markdown
-# Deep Log Audit Report
+# Log Insight Report
 ## Параметры анализа
 [same as above]
 ## Результат
